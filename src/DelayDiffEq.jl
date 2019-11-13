@@ -17,7 +17,7 @@ using DiffEqBase: @..
 
 using DiffEqBase: FastConvergence, Convergence, SlowConvergence, VerySlowConvergence, Divergence
 
-using OrdinaryDiffEq: GenericImplicitEulerCache, GenericTrapezoidCache, RosenbrockMutableCache
+using OrdinaryDiffEq: RosenbrockMutableCache
 
 export Discontinuity, MethodOfSteps
 
@@ -28,7 +28,9 @@ include("ddestats.jl")
 include("integrators/type.jl")
 include("integrators/utils.jl")
 include("integrators/interface.jl")
+
 include("fpsolve/type.jl")
+include("fpsolve/fpsolve.jl")
 include("fpsolve/utils.jl")
 include("fpsolve/functional.jl")
 include("cache_utils.jl")

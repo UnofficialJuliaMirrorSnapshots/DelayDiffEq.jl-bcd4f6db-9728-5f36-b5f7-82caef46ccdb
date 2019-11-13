@@ -128,7 +128,7 @@ function OrdinaryDiffEq.perform_step!(integrator::DDEIntegrator)
   # solution, i.e. returned extrapolated values, continue with a fixed-point iteration
   if history.isout
     # perform fixed-point iteration
-    fpsolve!(integrator.fpsolver, integrator)
+    OrdinaryDiffEq.nlsolve!(integrator.fpsolver, integrator)
   end
 
   # update ODE integrator to next time interval together with correct interpolation
@@ -191,7 +191,7 @@ function Base.resize!(integrator::DDEIntegrator, cache, i)
   OrdinaryDiffEq.resize_nlsolver!(integrator, i)
   OrdinaryDiffEq.resize_J_W!(cache, integrator, i)
   resize_non_user_cache!(integrator, cache, i)
-  fpsolve_resize!(integrator, i)
+  resize_fpsolver!(integrator, i)
   nothing
 end
 
@@ -203,13 +203,6 @@ function DiffEqBase.resize_non_user_cache!(integrator::DDEIntegrator,
   cache.W = similar(cache.W, i, i)
   cache.jac_config = DiffEqBase.resize_jac_config!(cache.jac_config, i)
   cache.grad_config = OrdinaryDiffEq.resize_grad_config!(cache.grad_config, i)
-  nothing
-end
-
-function DiffEqBase.resize_non_user_cache!(integrator::DDEIntegrator,
-                                           cache::Union{GenericImplicitEulerCache,GenericTrapezoidCache},
-                                           i)
-  cache.nl_rhs = integrator.alg.nlsolve(Val{:init}, cache.rhs, cache.u)
   nothing
 end
 
